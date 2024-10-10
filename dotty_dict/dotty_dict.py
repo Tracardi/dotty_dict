@@ -200,6 +200,21 @@ class Dotty:
 
         set_to(self._split(key), self._data)
 
+    def __getstate__(self):
+        return {
+            '_data': self._data,
+            'separator': self.separator,
+            'esc_char': self.esc_char,
+            'no_list': self.no_list
+        }
+
+    def __setstate__(self, state):
+        self._data = state['_data']
+        self.separator = state['separator']
+        self.esc_char = state['esc_char']
+        self.no_list = state['no_list']
+
+
     @staticmethod
     def set_list_index(data, index, value):
         """Set value in list at specified index.
