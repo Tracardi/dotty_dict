@@ -231,7 +231,7 @@ class Dotty:
 
     def __delitem__(self, key):
         def del_key(items, data):
-            """Recursively remove deep key from dict.
+            """Recursively remove deep key from dict and remove empty parent dictionaries.
 
             :param list items: List of dictionary keys
             :param data: Portion of dictionary to operate on
@@ -242,8 +242,14 @@ class Dotty:
                 it = int(it)
             if items:
                 del_key(items, data[it])
+                # Remove the parent dictionary if it's empty
+                if isinstance(data[it], dict) and not data[it]:
+                    del data[it]
             else:
                 del data[it]
+                # Remove the parent dictionary if it's empty
+                if isinstance(data, dict) and not data:
+                    data.clear()
 
         del_key(self._split(key), self._data)
 
